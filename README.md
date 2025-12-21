@@ -8,6 +8,8 @@ The project uses machine learning to build a predictive model that estimates the
 
 ## Business Problem
 
+![Supply and Demand](images\supply_demand.png)
+
 In the ride-sharing industry, companies such as Uber, Lyft, or local taxi services manage a fleet of drivers to meet user demand. To optimize fleet usage, the business needs to ensure that:
 
 1. **Supply (drivers)** matches **demand (users requesting rides)**.

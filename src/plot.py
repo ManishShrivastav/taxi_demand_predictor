@@ -40,6 +40,6 @@ def plot_one_sample(
         fig.add_scatter(x=ts_dates[-1:], y=[prediction_],
                     line_color='red',
                     mode='markers', marker_symbol= 'x', 
-                    marker_size=15, name='actual value')
+                    marker_size=15, name='prediction')
         
     return fig

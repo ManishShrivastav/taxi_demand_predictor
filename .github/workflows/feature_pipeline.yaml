@@ -30,7 +30,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Update lock file
-        run: poetry lock --no-update
+        run: poetry lock --no-update --no-interaction
 
       - name: Install dependencies
         run: poetry install

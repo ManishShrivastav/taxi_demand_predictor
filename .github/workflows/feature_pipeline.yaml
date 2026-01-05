@@ -28,12 +28,11 @@ jobs:
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
-
-      - name: Update lock file
-        run: poetry lock --no-update --no-interaction
+        with:
+          version: 1.8.5
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-interaction
 
       - name: Execute feature pipeline
         env:

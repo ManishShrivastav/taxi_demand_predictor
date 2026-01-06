@@ -40,7 +40,10 @@ jobs:
       - name: Execute feature pipeline
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-        run: poetry run jupyter nbconvert --to notebook --execute notebooks/12_feature_pipeline.ipynb
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          cd notebooks
+          poetry run jupyter nbconvert --to notebook --execute 12_feature_pipeline.ipynb
 
       - name: Upload notebook execution logs
         if: always()

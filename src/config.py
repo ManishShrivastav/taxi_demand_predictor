@@ -7,11 +7,16 @@ from src.paths import PARENT_DIR
 load_dotenv(PARENT_DIR / '.env')
 
 HOPSWORKS_PROJECT_NAME = 'nyc_taxiride_demand'
+
+# Try Streamlit secrets first, then environment variable
 try:
-    HOPSWORKS_API_KEY = os.environ['HOPSWORKS_API_KEY']
+    import streamlit as st
+    HOPSWORKS_API_KEY = st.secrets["HOPSWORKS_API_KEY"]
 except:
-    raise Exception('Create a .env file in the project root directory' \
-    'with the HOPSWORKS_API_KEY')
+    try:
+        HOPSWORKS_API_KEY = os.environ['HOPSWORKS_API_KEY']
+    except:
+        raise Exception('Set HOPSWORKS_API_KEY in Streamlit secrets or .env file')
 
 FEATURE_GROUP_NAME = 'time_series_hourly_feature_group'
 FEATURE_GROUP_VERSION = 1

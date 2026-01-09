@@ -55,6 +55,44 @@ with st.spinner(text='Fetching model predictions and actual values from the stor
     st.sidebar.write('✅ Model predictions and actual values loaded')
     progress_bar.progress(1/N_STEPS)
 
+# Debug section - show what's in the feature store
+with st.expander("🔍 Debug: Data Availability", expanded=True):
+    from src.feature_store_api import get_feature_store
+    import src.config as config
+    
+    feature_store = get_feature_store()
+    
+    # Check predictions
+    predictions_fg = feature_store.get_feature_group(
+        name=config.FEATURE_GROUP_MODEL_PREDICTIONS,
+        version=1
+    )
+    predictions_df = predictions_fg.read()
+    predictions_df['pickup_hour'] = pd.to_datetime(predictions_df['pickup_hour'])
+    
+    st.write(f"**Predictions in feature store:** {len(predictions_df)} rows")
+    st.write(f"**Predictions date range:** {predictions_df['pickup_hour'].min()} to {predictions_df['pickup_hour'].max()}")
+    st.write(f"**Unique hours with predictions:** {predictions_df['pickup_hour'].nunique()}")
+    
+    # Check actuals
+    actuals_fg = feature_store.get_feature_group(
+        name=config.FEATURE_GROUP_NAME,
+        version=config.FEATURE_GROUP_VERSION
+    )
+    actuals_df = actuals_fg.read()
+    actuals_df['pickup_hour'] = pd.to_datetime(actuals_df['pickup_hour'])
+    
+    st.write(f"**Actuals in feature store:** {len(actuals_df)} rows")
+    st.write(f"**Actuals date range:** {actuals_df['pickup_hour'].min()} to {actuals_df['pickup_hour'].max()}")
+    
+    # Show overlap
+    pred_hours = set(predictions_df['pickup_hour'].unique())
+    actual_hours = set(actuals_df['pickup_hour'].unique())
+    overlap = pred_hours & actual_hours
+    st.write(f"**Overlapping hours (where MAE can be calculated):** {len(overlap)}")
+    if overlap:
+        st.write(f"**Overlap range:** {min(overlap)} to {max(overlap)}")
+
 if monitoring_df.empty:
     st.error("⚠️ No data available! The monitoring DataFrame is empty.")
     st.stop()

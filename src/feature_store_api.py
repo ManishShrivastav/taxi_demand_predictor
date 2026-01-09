@@ -34,4 +34,52 @@ def get_feature_group(
     """
     return get_feature_store().get_feature_group(
         name=name,
+        version=version
+    )
+
+def get_or_create_feature_group(
+    name: str,
+    version: int = 1,
+    description: str = "",
+    primary_key: list = None,
+    event_time: str = None
+):
+    """
+    Gets or creates a feature group in the feature store.
+    
+    Args:
+        name (str): Name of the feature group
+        version (int): Version of the feature group (default: 1)
+        description (str): Description of the feature group
+        primary_key (list): List of column names to use as primary key
+        event_time (str): Name of the column to use as event time
+    
+    Returns:
+        FeatureGroup: The feature group instance
+    """
+    feature_store = get_feature_store()
+    return feature_store.get_or_create_feature_group(
+        name=name,
+        version=version,
+        description=description,
+        primary_key=primary_key or [],
+        event_time=event_time
+    )
+
+
+def get_feature_view(name: str, version: int = 1):
+    """
+    Returns a feature view from the feature store.
+    
+    Args:
+        name (str): Name of the feature view
+        version (int): Version of the feature view (default: 1)
+    
+    Returns:
+        FeatureView: The feature view instance
+    """
+    feature_store = get_feature_store()
+    return feature_store.get_feature_view(
+        name=name,
+        version=version
     )

@@ -1,0 +1,47 @@
+name: hourly-taxi-demand-inference-pipeline
+
+on:
+  workflow_run:
+    - workflows: ["hourly-taxi-demand-feature-pipeline"]
+      types:
+        - completed
+  workflow_dispatch:
+
+jobs:
+  feature-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Execute inference pipeline
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          cd notebooks
+          jupyter nbconvert --to notebook --execute 14_inference_pipeline.ipynb
+
+      - name: Upload notebook execution logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-logs
+          path: notebooks/14_inference_pipeline.nbconvert.ipynb

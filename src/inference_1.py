@@ -108,3 +108,56 @@ def load_model_from_registry():
     model = joblib.load(Path(model_dir) / 'model.pkl')
 
     return model
+
+def load_predictions_from_store(
+    from_pickup_hour: datetime,
+    to_pickup_hour: datetime
+) -> pd.DataFrame:
+    """
+    Fetches model predictions from the feature store for a given time range.
+    
+    Args:
+        from_pickup_hour (datetime): min datetime (rounded hour) for which we want to get
+            predictions
+        to_pickup_hour (datetime): max datetime (rounded hour) for which we want to get
+            predictions
+    
+    Returns:
+        pd.DataFrame: columns:
+            - pickup_location_id
+            - predicted_demand
+            - pickup_hour
+    """
+    from src.feature_store_api import get_feature_store
+    
+    feature_store = get_feature_store()
+    
+    # Get the predictions feature group
+    prediction_fg = feature_store.get_feature_group(
+        name=config.FEATURE_GROUP_MODEL_PREDICTIONS,
+        version=1
+    )
+    
+    # Fetch predictions for the specified time range
+    try:
+        predictions = prediction_fg.read()
+        predictions['pickup_hour'] = pd.to_datetime(predictions['pickup_hour'])
+        
+        # Filter to the requested time range
+        predictions = predictions[
+            predictions['pickup_hour'].between(from_pickup_hour, to_pickup_hour)
+        ]
+        
+        # Sort by pickup_hour and location
+        predictions = predictions.sort_values(
+            by=['pickup_hour', 'pickup_location_id']
+        ).reset_index(drop=True)
+        
+        return predictions
+        
+    except Exception as e:
+        print(f"Error fetching predictions: {e}")
+        raise ValueError(
+            f"Could not fetch predictions from {from_pickup_hour} to {to_pickup_hour}. "
+            f"Make sure the inference pipeline has run and saved predictions."
+        )

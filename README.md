@@ -1,105 +1,320 @@
-# Taxi demand predictor service
+# 🚕 NYC Taxi Demand Predictor — Real-Time MLOps System
 
-## Overview
+[![Feature Pipeline](https://github.com/ManishShrivastav/taxi_demand_predictor/actions/workflows/feature_pipeline.yaml/badge.svg)](https://github.com/ManishShrivastav/taxi_demand_predictor/actions/workflows/feature_pipeline.yaml)
+[![Inference Pipeline](https://github.com/ManishShrivastav/taxi_demand_predictor/actions/workflows/inference_pipeline.yaml/badge.svg)](https://github.com/ManishShrivastav/taxi_demand_predictor/actions/workflows/inference_pipeline.yaml)
 
-This project aims to solve the business problem of optimizing the fleet distribution for a ride-sharing service by predicting demand and balancing supply with demand in real-time. The goal is to ensure that the fleet of drivers is distributed efficiently across different areas of a city, maximizing the number of rides completed and minimizing wait times for users, ultimately increasing the company's revenue.
+> **An end-to-end MLOps system for predicting hourly taxi demand across 260+ NYC zones, featuring automated pipelines, a feature store, and real-time monitoring dashboards.**
 
-The project uses machine learning to build a predictive model that estimates the number of taxi rides requested in different areas at different times. By using historical ride data, the model will predict future demand, allowing the operations team to adjust the distribution of drivers, either by sending them to areas with high demand or offering incentives to drivers to move to underserved areas.
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Hopsworks](https://img.shields.io/badge/Feature%20Store-Hopsworks-orange)
+![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-red?logo=streamlit)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black?logo=github-actions)
+![LightGBM](https://img.shields.io/badge/Model-LightGBM-green)
 
-## Business Problem
+---
 
-![Supply and Demand](images/supply_demand.png)
+## 🎯 Project Focus
 
-In the ride-sharing industry, companies such as Uber, Lyft, or local taxi services manage a fleet of drivers to meet user demand. To optimize fleet usage, the business needs to ensure that:
+**This is NOT a typical ML project focused on model accuracy.**
 
-1. **Supply (drivers)** matches **demand (users requesting rides)**.
-2. The fleet should be as productive as possible to avoid both **driver surplus** (idle drivers) and **driver deficit** (unfulfilled ride requests).
+This project demonstrates **production ML engineering** — taking a trained model and building the infrastructure to:
+- Serve predictions in real-time
+- Automate data and inference pipelines
+- Monitor model performance in production
+- Handle the full MLOps lifecycle
 
-By utilizing machine learning to predict demand patterns, the company can achieve more efficient driver dispatch, reduce waiting times for users, and improve overall customer satisfaction.
+| What This Project IS | What This Project IS NOT |
+|---------------------|--------------------------|
+| ✅ Feature Store architecture | ❌ Hyperparameter tuning focus |
+| ✅ Automated hourly pipelines | ❌ Model comparison studies |
+| ✅ Real-time inference system | ❌ Deep learning experiments |
+| ✅ Production monitoring | ❌ Kaggle-style competitions |
+| ✅ CI/CD with GitHub Actions | ❌ Accuracy optimization |
 
-## Objective
+---
 
-The primary goal of this project is to develop a machine learning model that predicts the number of users requesting rides in different areas of the city at a given time. With this information, the company can adjust its fleet distribution in real-time.
-
-### Key objectives:
-
-- Predict the **number of users** requesting rides in different areas of New York City for the next hour.
-- Balance the supply of drivers with user demand, minimizing idle time and missed opportunities.
-- Help the operations team make data-driven decisions, such as sending push notifications to drivers in the right places or offering incentives.
-
-## Project Structure
-
-### 1. **Data Collection**
-   - The model is trained using historical data of taxi rides in New York City. This data includes ride requests and completion, but not the exact demand (user requests) data. However, ride data is sufficiently detailed for this task.
-   - Data includes time, location, and ride duration.
-
-### 2. **Data Preprocessing**
-   - **Feature Engineering**: Historical ride data is used to create features such as time of day, weather, holidays, and special events that can influence demand.
-   - **Data Cleaning**: Handle missing data, remove outliers, and standardize features.
-
-### 3. **Model Development**
-   - Machine learning algorithms are used to predict the number of users requesting rides in each area of the city.
-   - Possible models for demand prediction include **Linear Regression**, **Decision Trees**, and **Random Forests**, among others. The model performance is evaluated using standard metrics such as **MAE (Mean Absolute Error)** and **RMSE (Root Mean Squared Error)**.
-
-### 4. **Deployment & Operation**
-   - Once the model is trained and validated, it is integrated into the ride-sharing company’s operations.
-   - The model’s predictions are used to alert drivers, shift fleet resources, and offer incentives for optimal driver distribution.
-
-## Tools and Technologies
-
-- **Python**: Programming language used for data manipulation, modeling, and evaluation.
-- **Pandas**: Data analysis and manipulation.
-- **Scikit-learn**: Machine learning library for implementing algorithms and evaluating model performance.
-- **Matplotlib** and **Seaborn**: Libraries for data visualization.
-- **Jupyter Notebooks**: For exploratory analysis and model development.
-- **SQL**: For querying and processing large datasets.
-
-## Approach
-
-### Step 1: Data Exploration
-- Begin with exploratory data analysis (EDA) to understand the ride request patterns across different locations and times in New York City.
-- Visualize trends such as time of day, seasonality, and location to identify patterns.
-
-### Step 2: Feature Engineering
-- Create features such as day of the week, time of day, weather, and location-based data (latitude, longitude).
-- Identify external factors that may influence demand, such as weather conditions or local events.
-
-### Step 3: Model Training
-- Train and test various machine learning algorithms to predict future ride requests in different areas.
-- Evaluate models using error metrics like MAE and RMSE to select the best-performing model.
-
-### Step 4: Real-Time Predictions
-- Once the model is developed, implement a system that can generate predictions for future demand.
-- Provide actionable recommendations for driver deployment, such as sending push notifications to drivers in specific locations or offering bonuses to incentivize movement.
-
-### Step 5: Deployment
-- Create a deployment pipeline to integrate the model’s predictions into the operational flow of the company.
-- Real-time updates allow the operations team to monitor the predictions and adjust the fleet in response to demand fluctuations.
-
-## Results & Impact
-
-By predicting user demand, the model helps the company optimize the distribution of drivers, reducing idle times and missed opportunities. As a result, the following benefits are achieved:
-
-- **Increased ride completions**: Matching supply and demand maximizes the number of successful rides.
-- **Improved driver utilization**: Drivers spend more time completing rides and less time waiting.
-- **Enhanced customer experience**: Users face shorter wait times and more reliable service.
-
-## Future Improvements
-
-- **Incorporate real-time traffic data**: Traffic conditions can affect ride times and demand, and integrating traffic data could further refine the model.
-- **Advanced ML techniques**: Explore deep learning models (e.g., LSTMs for time series forecasting) for more accurate predictions over longer time frames.
-- **Geospatial analysis**: Use clustering algorithms to optimize driver location allocation based on real-time demand data.
-
-## Installation
-
-To run this project locally, you’ll need the following dependencies:
-
-```bash
-pip install pandas scikit-learn matplotlib seaborn
+## 🏗️ System Architecture
 
 ```
-## Acknowledgments
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           NYC TAXI DEMAND PREDICTOR                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐         │
+│  │   RAW DATA      │    │  FEATURE STORE  │    │    MODEL        │         │
+│  │   (NYC TLC)     │───▶│   (Hopsworks)   │◀───│   REGISTRY      │         │
+│  └─────────────────┘    └────────┬────────┘    └─────────────────┘         │
+│                                  │                                          │
+│         ┌────────────────────────┼────────────────────────┐                │
+│         │                        │                        │                │
+│         ▼                        ▼                        ▼                │
+│  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐          │
+│  │  FEATURE    │         │  TRAINING   │         │  INFERENCE  │          │
+│  │  PIPELINE   │         │  PIPELINE   │         │  PIPELINE   │          │
+│  │  (Hourly)   │         │  (On-demand)│         │  (Hourly)   │          │
+│  └─────────────┘         └─────────────┘         └──────┬──────┘          │
+│         │                                                │                 │
+│         │              GitHub Actions                    │                 │
+│         └────────────────────────────────────────────────┘                 │
+│                                  │                                          │
+│                                  ▼                                          │
+│                    ┌─────────────────────────┐                             │
+│                    │    STREAMLIT APPS       │                             │
+│                    │  ┌───────────────────┐  │                             │
+│                    │  │ Prediction UI     │  │                             │
+│                    │  │ Monitoring UI     │  │                             │
+│                    │  └───────────────────┘  │                             │
+│                    └─────────────────────────┘                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-- Data source: NYC Taxi and Limousine Commission (TLC)
-- Special thanks to the various open-source libraries that made this project possible, including Pandas, Scikit-learn, and Matplotlib.
+---
 
+## 🔧 Tech Stack
+
+| Category | Technology | Purpose |
+|----------|------------|---------|
+| **Language** | Python 3.11 | Core development |
+| **Feature Store** | Hopsworks | Feature storage, versioning, and serving |
+| **ML Framework** | LightGBM | Gradient boosting for demand prediction |
+| **Orchestration** | GitHub Actions | Hourly automated pipeline execution |
+| **Frontend** | Streamlit | Interactive dashboards |
+| **Visualization** | Plotly, Folium | Interactive charts and maps |
+| **Data Processing** | Pandas, NumPy | Data manipulation |
+| **Geospatial** | GeoPandas, Shapely | NYC zone mapping |
+| **Experiment Tracking** | Optuna | Hyperparameter optimization (training) |
+
+---
+
+## 📊 Data Pipeline
+
+### Data Flow
+
+```
+NYC TLC Raw Data → Feature Engineering → Time-Series Features → Model Training → Predictions
+      │                    │                      │                    │            │
+      ▼                    ▼                      ▼                    ▼            ▼
+   Parquet            Hourly                 672 lag              Hopsworks     Feature
+    Files           Aggregation             features              Registry      Store
+```
+
+### Feature Engineering
+
+The model uses **672 lag features** (28 days × 24 hours) for each of the 260+ NYC taxi zones:
+
+```python
+features = [
+    'rides_previous_1_hour',
+    'rides_previous_2_hour',
+    ...
+    'rides_previous_672_hour'  # 28 days back
+]
+```
+
+---
+
+## 🔄 Pipeline Architecture
+
+### 1. Feature Pipeline (`hourly-taxi-demand-feature-pipeline`)
+- **Trigger**: Runs every hour via cron schedule
+- **Purpose**: Fetches latest taxi ride data, transforms into time-series features
+- **Output**: Updates `time_series_hourly_feature_group` in Hopsworks
+
+### 2. Inference Pipeline (`hourly-taxi-demand-inference-pipeline`)
+- **Trigger**: Automatically runs after feature pipeline completes
+- **Purpose**: Generates predictions for the next hour across all zones
+- **Output**: Saves predictions to `model_predictions_feature_group`
+
+### Pipeline Chaining
+```yaml
+# inference_pipeline.yaml
+on:
+  workflow_run:
+    workflows: ["hourly-taxi-demand-feature-pipeline"]
+    types:
+      - completed
+```
+
+---
+
+## 📱 Streamlit Applications
+
+### 1. Prediction Dashboard (`frontend.py`)
+Real-time visualization of predicted taxi demand:
+- Interactive NYC map with zone-level predictions
+- Time-series charts for selected zones
+- Hourly demand forecasts
+
+### 2. Monitoring Dashboard (`frontend_monitoring.py`)
+Production model monitoring:
+- MAE (Mean Absolute Error) tracking hour-by-hour
+- Per-location performance analysis
+- Predictions vs. actuals comparison
+
+---
+
+## 🗂️ Project Structure
+
+```
+taxi_demand_predictor/
+│
+├── 📁 .github/workflows/          # CI/CD Pipelines
+│   ├── feature_pipeline.yaml      # Hourly feature updates
+│   └── inference_pipeline.yaml    # Hourly predictions
+│
+├── 📁 data/
+│   ├── raw/                       # Raw taxi ride data
+│   ├── transformed/               # Processed time-series data
+│   └── taxi_zones/                # NYC zone shapefiles
+│
+├── 📁 notebooks/                  # Development & Pipeline Notebooks
+│   ├── 01-05: Data processing & visualization
+│   ├── 06-10: Model development & tuning
+│   ├── 11: Feature store backfill
+│   ├── 12: Feature pipeline (production)
+│   ├── 13: Training pipeline
+│   └── 14: Inference pipeline (production)
+│
+├── 📁 src/                        # Source Code Modules
+│   ├── config.py                  # Configuration & secrets
+│   ├── data.py                    # Data loading utilities
+│   ├── feature_store_api.py       # Hopsworks API wrapper
+│   ├── inference.py               # Inference logic
+│   ├── model.py                   # Model training utilities
+│   ├── monitoring.py              # MAE calculation & monitoring
+│   ├── frontend.py                # Prediction Streamlit app
+│   └── frontend_monitoring.py     # Monitoring Streamlit app
+│
+├── 📁 models/                     # Local model artifacts
+├── 📁 images/                     # Documentation images
+│
+├── requirements.txt               # Python dependencies
+└── README.md                      # This file
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.11+
+- Hopsworks account (free tier available)
+- GitHub account (for Actions)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ManishShrivastav/taxi_demand_predictor.git
+cd taxi_demand_predictor
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Configuration
+
+1. Create a `.env` file in the project root:
+```env
+HOPSWORKS_API_KEY=your_api_key_here
+```
+
+2. For Streamlit Cloud deployment, add the secret in your app settings.
+
+3. For GitHub Actions, add `HOPSWORKS_API_KEY` as a repository secret.
+
+### Running Locally
+
+```bash
+# Run prediction dashboard
+streamlit run src/frontend.py
+
+# Run monitoring dashboard
+streamlit run src/frontend_monitoring.py
+```
+
+---
+
+## 📈 Model Performance
+
+The LightGBM model is trained on 28 days of historical data and evaluated using:
+
+| Metric | Description |
+|--------|-------------|
+| **MAE** | Mean Absolute Error — average prediction error in rides |
+| **Hourly Tracking** | Performance monitored continuously via dashboards |
+
+---
+
+## 🔑 Key MLOps Concepts Demonstrated
+
+### 1. **Feature Store Pattern**
+- Centralized feature repository (Hopsworks)
+- Feature versioning and lineage
+- Point-in-time correct feature serving
+
+### 2. **Pipeline Orchestration**
+- Event-driven pipeline chaining
+- Automated hourly execution
+- Failure handling and artifact logging
+
+### 3. **Model Registry**
+- Versioned model storage
+- Model metadata tracking
+- Seamless model loading for inference
+
+### 4. **Production Monitoring**
+- Real-time MAE tracking
+- Predictions vs. actuals comparison
+- Location-level performance analysis
+
+### 5. **Infrastructure as Code**
+- GitHub Actions YAML workflows
+- Reproducible pipeline definitions
+- Secret management
+
+---
+
+## 🛣️ Future Enhancements
+
+- [ ] Add alerting when MAE exceeds threshold
+- [ ] Implement model retraining pipeline
+- [ ] Add A/B testing infrastructure
+- [ ] Integrate weather data as features
+- [ ] Add data drift detection
+- [ ] Implement feature importance monitoring
+
+---
+
+## 📄 License
+
+This project is for educational and portfolio purposes.
+
+---
+
+## 👤 Author
+
+**Manish Shrivastav**
+
+- Building production ML systems
+- Focus on MLOps and ML Engineering
+- [GitHub](https://github.com/ManishShrivastav)
+
+---
+
+## 🙏 Acknowledgments
+
+- **Data Source**: [NYC Taxi and Limousine Commission (TLC)](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
+- **Feature Store**: [Hopsworks](https://www.hopsworks.ai/)
+- **Inspiration**: Real-world MLOps practices from industry
+
+---
+
+<p align="center">
+  <i>Built with ❤️ to demonstrate real-world MLOps practices</i>
+</p>

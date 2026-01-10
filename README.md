@@ -284,7 +284,6 @@ The LightGBM model is trained on 28 days of historical data and evaluated using:
 
 - [ ] Add alerting when MAE exceeds threshold
 - [ ] Implement model retraining pipeline
-- [ ] Add A/B testing infrastructure
 - [ ] Integrate weather data as features
 - [ ] Add data drift detection
 - [ ] Implement feature importance monitoring

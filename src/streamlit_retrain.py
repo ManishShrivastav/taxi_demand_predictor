@@ -1,4 +1,7 @@
 import streamlit as st
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import os
 from src.model import load_model, train_model
 from src.data import load_validation_data

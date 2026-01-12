@@ -1,0 +1,26 @@
+name: Retrain Model on MAE Threshold
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run retraining script
+        env:
+          MAE_THRESHOLD: 10.0  # Set your threshold here or use GitHub secrets
+          MODEL_PATH: models/latest_model.pkl
+        run: |
+          python src/retrain_on_mae.py
